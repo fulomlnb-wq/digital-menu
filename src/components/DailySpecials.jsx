@@ -13,19 +13,9 @@ export default function DailySpecials({ special, onSelect }) {
       animate={{ opacity: 1, y: 0 }}
       whileTap={{ scale: 0.98 }}
     >
-      <motion.div
-        className="absolute inset-0 bg-white/10"
-        animate={{ x: ['-100%', '100%'] }}
-        transition={{ repeat: Infinity, duration: 3, ease: 'linear' }}
-        style={{ width: '50%' }}
-      />
-      <motion.div
-        className="relative flex items-start gap-3"
-        animate={{ scale: [1, 1.01, 1] }}
-        transition={{ repeat: Infinity, duration: 2 }}
-      >
+      <div className="relative flex items-start gap-3">
         <Sparkles className="mt-0.5 shrink-0" size={20} />
-        <motion.div>
+        <div>
           <p className="text-xs font-medium uppercase tracking-wider opacity-90">
             Daily Special
           </p>
@@ -36,8 +26,8 @@ export default function DailySpecials({ special, onSelect }) {
               {special.discount}
             </span>
           )}
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     </motion.button>
   )
 }

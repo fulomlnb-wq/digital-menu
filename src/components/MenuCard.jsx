@@ -1,6 +1,8 @@
+import { memo } from 'react'
 import { motion } from 'framer-motion'
 import { Flame, Plus } from 'lucide-react'
 import { useSound } from '../hooks/useSound'
+import MenuImage from './MenuImage'
 
 const tagStyles = {
   spicy: 'bg-red-500/15 text-red-600 dark:text-red-400',
@@ -9,43 +11,34 @@ const tagStyles = {
   healthy: 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400',
 }
 
-export default function MenuCard({ item, index, onOpen, onAdd }) {
+function MenuCard({ item, index, onOpen, onAdd }) {
   const { playAdd } = useSound()
   const isHealthy = item.tags?.includes('healthy') || item.tags?.includes('vegan')
+  const animDelay = Math.min(index * 0.03, 0.15)
 
   return (
     <motion.article
-      layout
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.95 }}
-      transition={{ delay: index * 0.05, duration: 0.35 }}
-      className={`group relative overflow-hidden rounded-2xl border bg-white shadow-sm transition hover:shadow-md dark:bg-zinc-900 ${
+      transition={{ delay: animDelay, duration: 0.25 }}
+      className={`group relative overflow-hidden rounded-2xl border bg-card shadow-sm transition hover:shadow-md ${
         item.popular
           ? 'border-orange-300/60 ring-1 ring-orange-400/30 dark:border-orange-500/40'
-          : 'border-zinc-100 dark:border-zinc-800'
+          : 'border-default'
       } ${isHealthy ? 'ring-1 ring-green-500/20' : ''}`}
       whileTap={{ scale: 0.98 }}
       onClick={() => onOpen(item)}
     >
       {item.popular && (
-        <motion.div
-          className="absolute left-3 top-3 z-10 flex items-center gap-1 rounded-full bg-gradient-to-r from-[#e85d04] to-[#dc2f02] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white shadow-lg"
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ type: 'spring', delay: 0.2 }}
-        >
+        <div className="absolute left-3 top-3 z-10 flex items-center gap-1 rounded-full bg-gradient-to-r from-[#e85d04] to-[#dc2f02] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white shadow-lg">
           <Flame size={10} />
           Most Popular
-        </motion.div>
+        </div>
       )}
 
-      <motion.div className="relative aspect-[4/3] overflow-hidden bg-zinc-100 dark:bg-zinc-800">
-        <img
-          src={item.image}
-          alt={item.name}
-          loading="lazy"
-          decoding="async"
+      <div className="relative aspect-[4/3] overflow-hidden bg-elevated">
+        <MenuImage
+          item={item}
           className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
         />
         {item.scarcity && (
@@ -53,20 +46,20 @@ export default function MenuCard({ item, index, onOpen, onAdd }) {
             {item.scarcity}
           </span>
         )}
-      </motion.div>
+      </div>
 
       <div className="p-3.5">
         <div className="flex items-start justify-between gap-2">
-          <h3 className="font-semibold text-zinc-900 dark:text-white">{item.name}</h3>
+          <h3 className="font-semibold text-primary">{item.name}</h3>
           <div className="text-right">
             {item.anchorPrice > item.price && (
-              <span className="block text-[10px] text-zinc-400 line-through">
+              <span className="block text-[10px] text-muted line-through">
                 ${item.anchorPrice}
               </span>
             )}
             <span
               className={`text-sm font-bold ${
-                isHealthy ? 'text-green-600 dark:text-green-400' : 'text-[#e85d04]'
+                isHealthy ? 'text-green-600 dark:text-green-400' : 'text-brand'
               }`}
             >
               ${item.price}
@@ -74,27 +67,23 @@ export default function MenuCard({ item, index, onOpen, onAdd }) {
           </div>
         </div>
 
-        <p className="mt-1 line-clamp-2 text-xs text-zinc-500 dark:text-zinc-400">
-          {item.description}
-        </p>
+        <p className="mt-1 line-clamp-2 text-xs text-muted">{item.description}</p>
 
         {item.socialProof && (
-          <p className="mt-2 text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
-            {item.socialProof}
-          </p>
+          <p className="mt-2 text-[10px] font-medium text-muted">{item.socialProof}</p>
         )}
 
         <div className="mt-2.5 flex flex-wrap items-center justify-between gap-2">
-          <motion.div className="flex flex-wrap gap-1">
+          <div className="flex flex-wrap gap-1">
             {(item.tags || []).map((tag) => (
               <span
                 key={tag}
-                className={`rounded-full px-2 py-0.5 text-[10px] font-medium capitalize ${tagStyles[tag] || 'bg-zinc-100 text-zinc-600'}`}
+                className={`rounded-full px-2 py-0.5 text-[10px] font-medium capitalize ${tagStyles[tag] || 'bg-elevated text-muted'}`}
               >
                 {tag}
               </span>
             ))}
-          </motion.div>
+          </div>
           <button
             type="button"
             onClick={(e) => {
@@ -112,3 +101,5 @@ export default function MenuCard({ item, index, onOpen, onAdd }) {
     </motion.article>
   )
 }
+
+export default memo(MenuCard)

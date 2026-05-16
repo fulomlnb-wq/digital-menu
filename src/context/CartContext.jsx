@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, useReducer } from 'react'
+import { createContext, useCallback, useContext, useMemo, useReducer } from 'react'
 
 const CartContext = createContext(null)
 
@@ -42,6 +42,22 @@ function cartReducer(state, action) {
 export function CartProvider({ children }) {
   const [state, dispatch] = useReducer(cartReducer, { items: [] })
 
+  const add = useCallback((item, qty = 1) => {
+    dispatch({ type: 'ADD', item, qty })
+  }, [])
+
+  const remove = useCallback((id) => {
+    dispatch({ type: 'REMOVE', id })
+  }, [])
+
+  const updateQty = useCallback((id, qty) => {
+    dispatch({ type: 'UPDATE_QTY', id, qty })
+  }, [])
+
+  const clear = useCallback(() => {
+    dispatch({ type: 'CLEAR' })
+  }, [])
+
   const total = useMemo(
     () => state.items.reduce((sum, i) => sum + i.price * i.qty, 0),
     [state.items]
@@ -57,12 +73,12 @@ export function CartProvider({ children }) {
       items: state.items,
       total,
       count,
-      add: (item, qty = 1) => dispatch({ type: 'ADD', item, qty }),
-      remove: (id) => dispatch({ type: 'REMOVE', id }),
-      updateQty: (id, qty) => dispatch({ type: 'UPDATE_QTY', id, qty }),
-      clear: () => dispatch({ type: 'CLEAR' }),
+      add,
+      remove,
+      updateQty,
+      clear,
     }),
-    [state.items, total, count]
+    [state.items, total, count, add, remove, updateQty, clear]
   )
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>

@@ -1,11 +1,31 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { Minus, Plus, Trash2, X } from 'lucide-react'
+import { CheckCircle, Minus, Plus, Trash2, X } from 'lucide-react'
+import { useState } from 'react'
 import { useCart } from '../context/CartContext'
 import { useSound } from '../hooks/useSound'
+import { submitOrder } from '../utils/order'
+import MenuImage from './MenuImage'
 
-export default function CartDrawer({ open, onClose }) {
+export default function CartDrawer({ open, onClose, tableNumber, restaurant }) {
   const { items, total, updateQty, remove, clear } = useCart()
   const { playClick } = useSound()
+  const [lastOrder, setLastOrder] = useState(null)
+
+  const handlePlaceOrder = () => {
+    playClick()
+    const order = submitOrder({
+      items,
+      total,
+      tableNumber,
+      restaurant,
+    })
+    setLastOrder(order)
+    clear()
+    setTimeout(() => {
+      setLastOrder(null)
+      onClose()
+    }, 2200)
+  }
 
   return (
     <AnimatePresence>
@@ -19,99 +39,120 @@ export default function CartDrawer({ open, onClose }) {
             onClick={onClose}
           />
           <motion.div
-            className="fixed bottom-0 left-0 right-0 z-50 max-h-[80vh] overflow-hidden rounded-t-3xl bg-white dark:bg-zinc-950"
+            className="fixed bottom-0 left-0 right-0 z-50 max-h-[80vh] overflow-hidden rounded-t-3xl bg-card"
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 300 }}
           >
-            <motion.div className="flex items-center justify-between border-b border-zinc-100 px-5 py-4 dark:border-zinc-800" layout>
-              <h2 className="text-lg font-semibold">Your order</h2>
-              <button type="button" onClick={onClose} className="p-1">
+            <div className="flex items-center justify-between border-b border-default px-5 py-4">
+              <h2 className="text-lg font-semibold text-primary">Your order</h2>
+              <button
+                type="button"
+                onClick={onClose}
+                className="p-1 text-muted"
+                aria-label="Close cart"
+              >
                 <X size={22} />
               </button>
-            </motion.div>
-
-            <div className="max-h-[50vh] overflow-y-auto px-5 py-3">
-              {items.length === 0 ? (
-                <p className="py-8 text-center text-sm text-zinc-500">Cart is empty</p>
-              ) : (
-                items.map((item) => (
-                  <motion.div
-                    key={item.id}
-                    layout
-                    className="flex gap-3 border-b border-zinc-50 py-3 dark:border-zinc-900"
-                  >
-                    <img
-                      src={item.image}
-                      alt=""
-                      className="h-16 w-16 rounded-xl object-cover"
-                      loading="lazy"
-                    />
-                    <div className="flex-1">
-                      <p className="font-medium text-sm">{item.name}</p>
-                      <p className="text-sm text-[#e85d04] font-semibold">
-                        ${(item.price * item.qty).toFixed(0)}
-                      </p>
-                      <div className="mt-2 flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            playClick()
-                            updateQty(item.id, item.qty - 1)
-                          }}
-                          className="rounded-full bg-zinc-100 p-1 dark:bg-zinc-800"
-                        >
-                          <Minus size={14} />
-                        </button>
-                        <span className="text-sm font-medium w-4 text-center">{item.qty}</span>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            playClick()
-                            updateQty(item.id, item.qty + 1)
-                          }}
-                          className="rounded-full bg-zinc-100 p-1 dark:bg-zinc-800"
-                        >
-                          <Plus size={14} />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            playClick()
-                            remove(item.id)
-                          }}
-                          className="ml-auto text-zinc-400"
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))
-              )}
             </div>
 
-            {items.length > 0 && (
-              <div className="border-t border-zinc-100 px-5 py-4 dark:border-zinc-800">
-                <div className="mb-3 flex justify-between text-sm">
-                  <span className="text-zinc-500">Subtotal</span>
-                  <span className="font-bold">${total.toFixed(2)}</span>
-                </div>
-                <motion.button
-                  type="button"
-                  className="w-full rounded-full bg-[#e85d04] py-3.5 text-sm font-semibold text-white"
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => {
-                    playClick()
-                    alert('Order sent to kitchen! (Demo)')
-                    clear()
-                    onClose()
-                  }}
-                >
-                  Place order
-                </motion.button>
+            {lastOrder ? (
+              <div className="px-5 py-10 text-center">
+                <CheckCircle className="mx-auto text-green-500" size={48} />
+                <p className="mt-4 text-lg font-semibold text-primary">Order placed!</p>
+                <p className="mt-1 text-sm text-muted">
+                  {lastOrder.table
+                    ? `Table ${lastOrder.table} · `
+                    : ''}
+                  ${lastOrder.total.toFixed(2)} · {lastOrder.items.length} item(s)
+                </p>
               </div>
+            ) : (
+              <>
+                <div className="max-h-[50vh] overflow-y-auto px-5 py-3 overscroll-contain">
+                  {items.length === 0 ? (
+                    <p className="py-8 text-center text-sm text-muted">Cart is empty</p>
+                  ) : (
+                    items.map((item) => (
+                      <div
+                        key={item.id}
+                        className="flex gap-3 border-b border-default py-3 last:border-0"
+                      >
+                        <MenuImage
+                          item={item}
+                          className="h-16 w-16 shrink-0 rounded-xl object-cover"
+                        />
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-sm font-medium text-primary">{item.name}</p>
+                          <p className="text-sm font-semibold text-brand">
+                            ${(item.price * item.qty).toFixed(0)}
+                          </p>
+                          <div className="mt-2 flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                playClick()
+                                updateQty(item.id, item.qty - 1)
+                              }}
+                              className="rounded-full bg-elevated p-1 text-primary"
+                              aria-label="Decrease quantity"
+                            >
+                              <Minus size={14} />
+                            </button>
+                            <span className="w-4 text-center text-sm font-medium text-primary">
+                              {item.qty}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                playClick()
+                                updateQty(item.id, item.qty + 1)
+                              }}
+                              className="rounded-full bg-elevated p-1 text-primary"
+                              aria-label="Increase quantity"
+                            >
+                              <Plus size={14} />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                playClick()
+                                remove(item.id)
+                              }}
+                              className="ml-auto text-muted"
+                              aria-label="Remove item"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+
+                {items.length > 0 && (
+                  <div className="border-t border-default px-5 py-4">
+                    {tableNumber && (
+                      <p className="mb-2 text-center text-xs text-muted">
+                        Delivering to Table {tableNumber}
+                      </p>
+                    )}
+                    <div className="mb-3 flex justify-between text-sm">
+                      <span className="text-muted">Subtotal</span>
+                      <span className="font-bold text-primary">${total.toFixed(2)}</span>
+                    </div>
+                    <button
+                      type="button"
+                      className="w-full rounded-full bg-[#e85d04] py-3.5 text-sm font-semibold text-white transition active:scale-[0.98]"
+                      onClick={handlePlaceOrder}
+                    >
+                      Place order
+                    </button>
+                  </div>
+                )}
+              </>
             )}
           </motion.div>
         </>
