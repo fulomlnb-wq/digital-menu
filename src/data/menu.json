@@ -1,0 +1,181 @@
+{
+  "restaurant": {
+    "name": "Ember & Vine",
+    "tagline": "Crafted plates, unforgettable moments"
+  },
+  "dailySpecial": {
+    "title": "Chef's Fire Selection",
+    "description": "Truffle wagyu burger — today only",
+    "itemId": "m3",
+    "discount": "15% off"
+  },
+  "categories": [
+    { "id": "starters", "label": "Starters", "icon": "🥗" },
+    { "id": "mains", "label": "Main Course", "icon": "🍽️" },
+    { "id": "drinks", "label": "Drinks", "icon": "🍷" },
+    { "id": "desserts", "label": "Desserts", "icon": "🍰" }
+  ],
+  "items": [
+    {
+      "id": "s1",
+      "category": "starters",
+      "name": "Burnt Butter Scallops",
+      "description": "Caramelized scallops, citrus foam, micro herbs",
+      "price": 18,
+      "anchorPrice": 24,
+      "image": "https://images.unsplash.com/photo-1559847844-5315695dadae?w=600&q=80",
+      "tags": ["popular"],
+      "popular": true,
+      "highMargin": true,
+      "socialProof": "🔥 142 ordered today",
+      "scarcity": "Limited"
+    },
+    {
+      "id": "s2",
+      "category": "starters",
+      "name": "Heirloom Tomato Burrata",
+      "description": "Aged balsamic, basil oil, sourdough crisps",
+      "price": 14,
+      "anchorPrice": 19,
+      "image": "https://images.unsplash.com/photo-1608897013039-887f21d8c804?w=600&q=80",
+      "tags": ["vegan", "healthy"],
+      "popular": false,
+      "highMargin": false,
+      "socialProof": "🌿 Guest favorite"
+    },
+    {
+      "id": "s3",
+      "category": "starters",
+      "name": "Spicy Tuna Crispy Rice",
+      "description": "Yuzu mayo, jalapeño, sesame crunch",
+      "price": 16,
+      "anchorPrice": 22,
+      "image": "https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=600&q=80",
+      "tags": ["spicy", "popular"],
+      "popular": true,
+      "highMargin": true,
+      "socialProof": "🔥 98 ordered today",
+      "scarcity": "Only 4 left"
+    },
+    {
+      "id": "m1",
+      "category": "mains",
+      "name": "Dry-Aged Ribeye",
+      "description": "45-day aged, bone marrow butter, charred shallots",
+      "price": 48,
+      "anchorPrice": 62,
+      "image": "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=600&q=80",
+      "tags": ["popular"],
+      "popular": true,
+      "highMargin": true,
+      "socialProof": "🔥 203 ordered today",
+      "scarcity": "Limited"
+    },
+    {
+      "id": "m2",
+      "category": "mains",
+      "name": "Wild Mushroom Risotto",
+      "description": "Porcini, truffle oil, parmesan crisp",
+      "price": 28,
+      "anchorPrice": 36,
+      "image": "https://images.unsplash.com/photo-1476124369801-ff0e0e0a0b0e?w=600&q=80",
+      "tags": ["vegan"],
+      "popular": false,
+      "highMargin": false,
+      "socialProof": "⭐ 4.9 rating"
+    },
+    {
+      "id": "m3",
+      "category": "mains",
+      "name": "Truffle Wagyu Burger",
+      "description": "A5 wagyu patty, black truffle aioli, brioche",
+      "price": 34,
+      "anchorPrice": 44,
+      "image": "https://images.unsplash.com/photo-1568901836148-d0692c8d0b0b?w=600&q=80",
+      "tags": ["popular", "spicy"],
+      "popular": true,
+      "highMargin": true,
+      "socialProof": "🔥 167 ordered today",
+      "scarcity": "Only 3 left"
+    },
+    {
+      "id": "m4",
+      "category": "mains",
+      "name": "Grilled Atlantic Salmon",
+      "description": "Miso glaze, bok choy, ginger beurre blanc",
+      "price": 32,
+      "anchorPrice": 40,
+      "image": "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=600&q=80",
+      "tags": ["healthy"],
+      "popular": false,
+      "highMargin": false,
+      "socialProof": "🌿 Light & fresh"
+    },
+    {
+      "id": "d1",
+      "category": "drinks",
+      "name": "Smoked Old Fashioned",
+      "description": "Bourbon, cherry wood smoke, orange bitters",
+      "price": 16,
+      "anchorPrice": 21,
+      "image": "https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=600&q=80",
+      "tags": ["popular"],
+      "popular": true,
+      "highMargin": true,
+      "socialProof": "🔥 89 ordered today"
+    },
+    {
+      "id": "d2",
+      "category": "drinks",
+      "name": "Green Detox Elixir",
+      "description": "Cucumber, kale, apple, ginger, chlorophyll",
+      "price": 12,
+      "anchorPrice": 15,
+      "image": "https://images.unsplash.com/photo-1546173159-315724a31696?w=600&q=80",
+      "tags": ["vegan", "healthy"],
+      "popular": false,
+      "highMargin": false,
+      "socialProof": "🌿 Wellness pick"
+    },
+    {
+      "id": "d3",
+      "category": "drinks",
+      "name": "Passion Fruit Spritz",
+      "description": "Prosecco, passion fruit, elderflower",
+      "price": 14,
+      "anchorPrice": 18,
+      "image": "https://images.unsplash.com/photo-1514362545857-3bc16c4c7b18?w=600&q=80",
+      "tags": ["popular"],
+      "popular": true,
+      "highMargin": false,
+      "socialProof": "🔥 76 ordered today"
+    },
+    {
+      "id": "de1",
+      "category": "desserts",
+      "name": "Molten Chocolate Sphere",
+      "description": "Warm ganache, raspberry coulis, gold leaf",
+      "price": 14,
+      "anchorPrice": 19,
+      "image": "https://images.unsplash.com/photo-1606313564200-e75d5e304d01?w=600&q=80",
+      "tags": ["popular"],
+      "popular": true,
+      "highMargin": true,
+      "socialProof": "🔥 134 ordered today",
+      "scarcity": "Limited"
+    },
+    {
+      "id": "de2",
+      "category": "desserts",
+      "name": "Yuzu Posset",
+      "description": "Citrus cream, honeycomb, edible flowers",
+      "price": 11,
+      "anchorPrice": 14,
+      "image": "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=600&q=80",
+      "tags": ["vegan"],
+      "popular": false,
+      "highMargin": false,
+      "socialProof": "⭐ Chef's pick"
+    }
+  ]
+}

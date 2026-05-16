@@ -1,0 +1,124 @@
+import { AnimatePresence, motion } from 'framer-motion'
+import { Minus, Plus, X } from 'lucide-react'
+import { useState } from 'react'
+import { useCart } from '../context/CartContext'
+import { useSound } from '../hooks/useSound'
+import Food3DPreview from './Food3DPreview'
+
+export default function ItemModal({ item, onClose }) {
+  const [qty, setQty] = useState(1)
+  const { add } = useCart()
+  const { playAdd, playClick } = useSound()
+
+  if (!item) return null
+
+  const isHealthy = item.tags?.includes('healthy') || item.tags?.includes('vegan')
+
+  const handleAdd = () => {
+    playAdd()
+    add(item, qty)
+    onClose()
+  }
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        className="fixed inset-0 z-50 flex items-end justify-center sm:items-center"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      >
+        <motion.div
+          className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+          onClick={onClose}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        />
+        <motion.div
+          className="relative z-10 max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-t-3xl bg-white p-5 dark:bg-zinc-950 sm:rounded-3xl"
+          initial={{ y: '100%' }}
+          animate={{ y: 0 }}
+          exit={{ y: '100%' }}
+          transition={{ type: 'spring', damping: 28, stiffness: 300 }}
+        >
+          <button
+            type="button"
+            onClick={() => {
+              playClick()
+              onClose()
+            }}
+            className="absolute right-4 top-4 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-md"
+          >
+            <X size={18} />
+          </button>
+
+          <Food3DPreview imageUrl={item.image} />
+
+          <div className="mt-4">
+            {item.popular && (
+              <span className="mb-2 inline-block rounded-full bg-orange-500/15 px-2.5 py-0.5 text-xs font-semibold text-orange-600 dark:text-orange-400">
+                Most Popular
+              </span>
+            )}
+            <h2 className="text-xl font-semibold text-zinc-900 dark:text-white">{item.name}</h2>
+            <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">{item.description}</p>
+
+            {item.socialProof && (
+              <p className="mt-2 text-xs font-medium text-zinc-500">{item.socialProof}</p>
+            )}
+            {item.scarcity && (
+              <p className="mt-1 text-xs font-semibold text-amber-600">{item.scarcity}</p>
+            )}
+
+            <div className="mt-4 flex items-center gap-3">
+              {item.anchorPrice > item.price && (
+                <span className="text-sm text-zinc-400 line-through">${item.anchorPrice}</span>
+              )}
+              <span
+                className={`text-2xl font-bold ${
+                  isHealthy ? 'text-green-600' : 'text-[#e85d04]'
+                }`}
+              >
+                ${item.price}
+              </span>
+            </div>
+
+            <div className="mt-6 flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3 rounded-full bg-zinc-100 px-2 py-1 dark:bg-zinc-800">
+                <button
+                  type="button"
+                  onClick={() => {
+                    playClick()
+                    setQty((q) => Math.max(1, q - 1))
+                  }}
+                  className="flex h-9 w-9 items-center justify-center rounded-full bg-white shadow dark:bg-zinc-700"
+                >
+                  <Minus size={16} />
+                </button>
+                <span className="w-6 text-center font-semibold">{qty}</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    playClick()
+                    setQty((q) => q + 1)
+                  }}
+                  className="flex h-9 w-9 items-center justify-center rounded-full bg-white shadow dark:bg-zinc-700"
+                >
+                  <Plus size={16} />
+                </button>
+              </div>
+              <motion.button
+                type="button"
+                onClick={handleAdd}
+                className="flex-1 rounded-full bg-[#e85d04] py-3.5 text-sm font-semibold text-white shadow-lg shadow-orange-500/30"
+                whileTap={{ scale: 0.97 }}
+              >
+                Add to order · ${(item.price * qty).toFixed(0)}
+              </motion.button>
+            </div>
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  )
+}
