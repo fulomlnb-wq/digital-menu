@@ -1,0 +1,30 @@
+EMBER & VINE — MENU EDITING GUIDE (No coding needed)
+====================================================
+
+Managers can edit the menu in TWO ways:
+
+OPTION A — Manager Dashboard (easiest)
+  1. Open your site and go to:  your-site.com/admin
+  2. Log in with the manager password (default: manager123)
+  3. Use the "Edit Menu" tab — plain English fields for each dish
+
+OPTION B — Edit the menu file (for bulk changes)
+  File: src/data/menu.json  (or export from dashboard)
+
+FIELDS FOR EACH DISH:
+  - name          → Food Name (example: "Truffle Wagyu Burger")
+  - price         → Price in dollars (example: 34)
+  - category      → starters | mains | drinks | desserts
+  - description   → Short description customers see
+  - stockLimit    → Max orders allowed (example: 2). Leave empty if unlimited.
+  - scarcity      → Text shown on card (example: "Only 2 left")
+  - isDailySpecial → true or false (only one should be true)
+  - popular       → true to highlight as "Most Popular"
+
+TAX SETTINGS (bottom of menu file, "settings"):
+  - vatPercent           → VAT % (example: 12)
+  - serviceChargePercent → Service charge % (example: 10)
+  - taxPercent           → Any extra tax % (example: 0)
+  - adminPassword        → Password for /admin dashboard
+
+After editing the JSON file, redeploy the site on Netlify.

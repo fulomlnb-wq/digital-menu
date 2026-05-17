@@ -1,19 +1,16 @@
-import { motion } from 'framer-motion'
+import { memo } from 'react'
 import { Sparkles } from 'lucide-react'
 
-export default function DailySpecials({ special, onSelect }) {
+function DailySpecials({ special, onSelect }) {
   if (!special) return null
 
   return (
-    <motion.button
+    <button
       type="button"
       onClick={onSelect}
-      className="mx-4 mb-4 w-[calc(100%-2rem)] overflow-hidden rounded-2xl bg-gradient-to-r from-[#e85d04] to-[#dc2f02] p-4 text-left text-white shadow-lg shadow-orange-500/25"
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      whileTap={{ scale: 0.98 }}
+      className="mx-4 mb-4 w-[calc(100%-2rem)] overflow-hidden rounded-2xl bg-gradient-to-r from-[#e85d04] to-[#dc2f02] p-4 text-left text-white shadow-lg shadow-orange-500/25 transition active:scale-[0.98]"
     >
-      <div className="relative flex items-start gap-3">
+      <div className="flex items-start gap-3">
         <Sparkles className="mt-0.5 shrink-0" size={20} />
         <div>
           <p className="text-xs font-medium uppercase tracking-wider opacity-90">
@@ -28,6 +25,8 @@ export default function DailySpecials({ special, onSelect }) {
           )}
         </div>
       </div>
-    </motion.button>
+    </button>
   )
 }
+
+export default memo(DailySpecials)

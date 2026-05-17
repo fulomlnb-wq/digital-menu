@@ -9,42 +9,39 @@ function Recommendations({ items, onAdd, onOpen }) {
   if (!items?.length) return null
 
   return (
-    <section className="px-4 pb-6">
+    <section className="border-t border-default px-4 pb-8 pt-6">
       <div className="mb-3 flex items-center gap-2">
-        <Sparkles className="text-brand" size={18} />
-        <h2 className="text-sm font-semibold text-primary">You might also like…</h2>
+        <Sparkles className="text-brand" size={18} aria-hidden />
+        <h2 className="text-base font-semibold text-primary">You might also like…</h2>
       </div>
-      <div className="hide-scrollbar flex gap-3 overflow-x-auto pb-1">
+      <div className="hide-scrollbar -mx-1 flex gap-3 overflow-x-auto px-1 pb-1">
         {items.map((item) => (
-          <button
+          <article
             key={item.id}
-            type="button"
-            onClick={() => onOpen(item)}
-            className="w-36 shrink-0 overflow-hidden rounded-xl border border-default bg-card text-left transition active:scale-[0.97]"
+            className="w-36 shrink-0 overflow-hidden rounded-xl border border-default bg-card shadow-sm"
           >
-            <MenuImage item={item} className="h-24 w-full object-cover" />
-            <div className="p-2">
-              <p className="line-clamp-1 text-xs font-medium text-primary">{item.name}</p>
-              <div className="mt-1 flex items-center justify-between">
-                <span className="text-xs font-bold text-brand">${item.price}</span>
-                <span
-                  role="button"
-                  tabIndex={0}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    playAdd()
-                    onAdd(item)
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') onAdd(item)
-                  }}
-                  className="rounded-full bg-[#e85d04] px-2 py-0.5 text-[10px] text-white"
-                >
-                  Add
-                </span>
+            <button type="button" onClick={() => onOpen(item)} className="block w-full text-left">
+              <MenuImage item={item} className="h-24 w-full object-cover" />
+              <div className="p-2.5">
+                <p className="line-clamp-2 text-xs font-semibold leading-snug text-primary">
+                  {item.name}
+                </p>
+                <p className="mt-1 text-sm font-bold text-brand">${item.price}</p>
               </div>
+            </button>
+            <div className="border-t border-default px-2 pb-2">
+              <button
+                type="button"
+                onClick={() => {
+                  playAdd()
+                  onAdd(item, 1)
+                }}
+                className="mt-2 w-full rounded-full bg-[#e85d04] py-1.5 text-[11px] font-semibold text-white"
+              >
+                Add
+              </button>
             </div>
-          </button>
+          </article>
         ))}
       </div>
     </section>

@@ -1,22 +1,49 @@
 import { motion } from 'framer-motion'
 import { Minus, Plus, X } from 'lucide-react'
-import { memo, useState } from 'react'
+import { memo, useMemo, useState } from 'react'
 import { useCart } from '../context/CartContext'
 import { useSound } from '../hooks/useSound'
+import { getStockLimit, getStockMessage } from '../utils/stock'
 import Food3DPreview from './Food3DPreview'
 
-function ItemModal({ item, onClose }) {
+function ItemModal({ item, onClose, onAdd }) {
   const [qty, setQty] = useState(1)
-  const { add } = useCart()
+  const [error, setError] = useState('')
+  const { items: cartItems } = useCart()
   const { playAdd, playClick } = useSound()
+
+  const limit = useMemo(() => getStockLimit(item), [item])
+  const inCart = cartItems.find((i) => i.id === item.id)?.qty || 0
+  const maxCanAdd = limit != null ? Math.max(0, limit - inCart) : 99
 
   if (!item) return null
 
   const isHealthy = item.tags?.includes('healthy') || item.tags?.includes('vegan')
 
+  const changeQty = (delta) => {
+    setQty((q) => {
+      const next = q + delta
+      if (next < 1) return 1
+      if (limit != null && inCart + next > limit) {
+        setError(getStockMessage(item, limit))
+        return Math.min(next, maxCanAdd)
+      }
+      setError('')
+      return limit != null ? Math.min(next, maxCanAdd) : next
+    })
+  }
+
   const handleAdd = () => {
+    if (limit != null && inCart + qty > limit) {
+      setError(getStockMessage(item, limit))
+      return
+    }
     playAdd()
-    add(item, qty)
+    const result = onAdd ? onAdd(item, qty) : null
+    if (result && !result.ok) {
+      setError(result.message)
+      return
+    }
     onClose()
   }
 
@@ -30,8 +57,6 @@ function ItemModal({ item, onClose }) {
       <motion.div
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
         onClick={onClose}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
       />
       <motion.div
         className="relative z-10 max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-t-3xl bg-card p-5 sm:rounded-3xl"
@@ -85,28 +110,33 @@ function ItemModal({ item, onClose }) {
             </span>
           </div>
 
+          {error && (
+            <p className="mt-3 rounded-lg bg-amber-500/10 px-3 py-2 text-xs text-amber-800 dark:text-amber-200">
+              {error}
+            </p>
+          )}
+
           <div className="mt-6 flex items-center justify-between gap-4">
             <div className="flex items-center gap-3 rounded-full bg-elevated px-2 py-1">
               <button
                 type="button"
                 onClick={() => {
                   playClick()
-                  setQty((q) => Math.max(1, q - 1))
+                  changeQty(-1)
                 }}
                 className="flex h-9 w-9 items-center justify-center rounded-full bg-card text-primary shadow"
-                aria-label="Decrease quantity"
               >
                 <Minus size={16} />
               </button>
               <span className="w-6 text-center font-semibold text-primary">{qty}</span>
               <button
                 type="button"
+                disabled={limit != null && qty >= maxCanAdd}
                 onClick={() => {
                   playClick()
-                  setQty((q) => q + 1)
+                  changeQty(1)
                 }}
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-card text-primary shadow"
-                aria-label="Increase quantity"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-card text-primary shadow disabled:opacity-40"
               >
                 <Plus size={16} />
               </button>
@@ -114,9 +144,10 @@ function ItemModal({ item, onClose }) {
             <button
               type="button"
               onClick={handleAdd}
-              className="flex-1 rounded-full bg-[#e85d04] py-3.5 text-sm font-semibold text-white shadow-lg shadow-orange-500/30 transition active:scale-[0.97]"
+              disabled={maxCanAdd < 1}
+              className="flex-1 rounded-full bg-[#e85d04] py-3.5 text-sm font-semibold text-white shadow-lg shadow-orange-500/30 transition active:scale-[0.97] disabled:opacity-50"
             >
-              Add to order · ${(item.price * qty).toFixed(0)}
+              {maxCanAdd < 1 ? 'Sold out' : `Add · $${(item.price * qty).toFixed(0)}`}
             </button>
           </div>
         </div>

@@ -3,6 +3,13 @@
     "name": "Ember & Vine",
     "tagline": "Crafted plates, unforgettable moments"
   },
+  "settings": {
+    "adminPassword": "manager123",
+    "vatPercent": 12,
+    "serviceChargePercent": 10,
+    "taxPercent": 0,
+    "currencySymbol": "$"
+  },
   "dailySpecial": {
     "title": "Chef's Fire Selection",
     "description": "Truffle wagyu burger — today only",
@@ -28,7 +35,9 @@
       "popular": true,
       "highMargin": true,
       "socialProof": "🔥 142 ordered today",
-      "scarcity": "Limited"
+      "scarcity": "Limited",
+      "stockLimit": null,
+      "isDailySpecial": false
     },
     {
       "id": "s2",
@@ -41,7 +50,8 @@
       "tags": ["vegan", "healthy"],
       "popular": false,
       "highMargin": false,
-      "socialProof": "🌿 Guest favorite"
+      "socialProof": "🌿 Guest favorite",
+      "isDailySpecial": false
     },
     {
       "id": "s3",
@@ -55,7 +65,9 @@
       "popular": true,
       "highMargin": true,
       "socialProof": "🔥 98 ordered today",
-      "scarcity": "Only 4 left"
+      "scarcity": "Only 4 left",
+      "stockLimit": 4,
+      "isDailySpecial": false
     },
     {
       "id": "m1",
@@ -69,7 +81,8 @@
       "popular": true,
       "highMargin": true,
       "socialProof": "🔥 203 ordered today",
-      "scarcity": "Limited"
+      "scarcity": "Limited",
+      "isDailySpecial": false
     },
     {
       "id": "m2",
@@ -82,7 +95,8 @@
       "tags": ["vegan"],
       "popular": false,
       "highMargin": false,
-      "socialProof": "⭐ 4.9 rating"
+      "socialProof": "⭐ 4.9 rating",
+      "isDailySpecial": false
     },
     {
       "id": "m3",
@@ -96,7 +110,9 @@
       "popular": true,
       "highMargin": true,
       "socialProof": "🔥 167 ordered today",
-      "scarcity": "Only 3 left"
+      "scarcity": "Only 3 left",
+      "stockLimit": 3,
+      "isDailySpecial": true
     },
     {
       "id": "m4",
@@ -109,7 +125,10 @@
       "tags": ["healthy"],
       "popular": false,
       "highMargin": false,
-      "socialProof": "🌿 Light & fresh"
+      "socialProof": "🌿 Light & fresh",
+      "scarcity": "Only 2 left",
+      "stockLimit": 2,
+      "isDailySpecial": false
     },
     {
       "id": "d1",
@@ -122,7 +141,8 @@
       "tags": ["popular"],
       "popular": true,
       "highMargin": true,
-      "socialProof": "🔥 89 ordered today"
+      "socialProof": "🔥 89 ordered today",
+      "isDailySpecial": false
     },
     {
       "id": "d2",
@@ -135,7 +155,8 @@
       "tags": ["vegan", "healthy"],
       "popular": false,
       "highMargin": false,
-      "socialProof": "🌿 Wellness pick"
+      "socialProof": "🌿 Wellness pick",
+      "isDailySpecial": false
     },
     {
       "id": "d3",
@@ -148,7 +169,8 @@
       "tags": ["popular"],
       "popular": true,
       "highMargin": false,
-      "socialProof": "🔥 76 ordered today"
+      "socialProof": "🔥 76 ordered today",
+      "isDailySpecial": false
     },
     {
       "id": "de1",
@@ -162,7 +184,8 @@
       "popular": true,
       "highMargin": true,
       "socialProof": "🔥 134 ordered today",
-      "scarcity": "Limited"
+      "scarcity": "Limited",
+      "isDailySpecial": false
     },
     {
       "id": "de2",
@@ -175,7 +198,8 @@
       "tags": ["vegan"],
       "popular": false,
       "highMargin": false,
-      "socialProof": "⭐ Chef's pick"
+      "socialProof": "⭐ Chef's pick",
+      "isDailySpecial": false
     }
   ]
 }
